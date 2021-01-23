@@ -27,6 +27,8 @@ const Anecdote = (props) => {
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [popular, setPopular] = useState(-1)
+  const [popularVotes, setPopularVotes] = useState(-1)
 
   const getRandomNumber = (max, past) => {
     while (true) {
@@ -43,14 +45,38 @@ const App = (props) => {
     const copyOfVotes = [...votes]
     copyOfVotes[index] += 1
     setVotes(copyOfVotes)
+
+    if (votes[index] === popularVotes) {
+      setPopular(-1)
+      return
+    }
+
+    if (votes[index] > popularVotes) {
+      setPopular(index)
+      setPopularVotes(votes[index])
+    }
+
   }
 
-  // TODO: Anecdote with the most votes!
-  return (
+  if (popular > -1) { // Not a tie
+    return (
+      <div>
+        <Anecdote anecdoteText={anecdotes[selected]} votes={votes[selected]} />
+        <Button action={() => vote(selected)} text='Vote!' />
+        <Button action={setNewRandomIndex} text='Next anecdote!' />
+        <h2>Anecdote with the most votes:</h2>
+        <Anecdote anecdoteText={anecdotes[popular]} votes={votes[popular]} />
+      </div >
+    )
+  }
+
+  return ( // A tie
     <div>
       <Anecdote anecdoteText={anecdotes[selected]} votes={votes[selected]} />
       <Button action={() => vote(selected)} text='Vote!' />
       <Button action={setNewRandomIndex} text='Next anecdote!' />
+      <h2>Anecdote with the most votes:</h2>
+      <p>It's a tie folks!</p>
     </div >
   )
 }
