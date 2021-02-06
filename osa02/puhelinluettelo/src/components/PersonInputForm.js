@@ -1,4 +1,5 @@
 import React from 'react'
+import personsService from '../services/persons'
 
 const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
 
@@ -11,7 +12,7 @@ const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, 
         setNewNumber(event.target.value)
         break
       default:
-        console.log("Event not recognized!")
+        console.log("Input event not recognized!")
     }
   }
 
@@ -21,25 +22,45 @@ const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, 
       name: newName,
       number: newNumber
     }
-    if (isDuplicate(newPerson)) {
-      alert(`${newPerson.name} is already in the phonebook`)
-      return 
+
+    const duplicate = isDuplicate(newPerson)
+    if (duplicate) {
+      const toBeReplaced = window.confirm(`${newPerson.name} is already in the phonebook. Would you like to update?`)
+      const changedPerson = { ...duplicate, number: newNumber }
+      if (toBeReplaced) {
+        personsService
+          .updatePerson(changedPerson)
+          .then(updatedPersonObject => {
+            setPersons(persons.map(person => person.id === updatedPersonObject.id ? updatedPersonObject : person))
+            clearFields()
+          })
+      }
+      return
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
+
+    personsService
+      .createPerson(newPerson)
+      .then(newPersonObject => {
+        setPersons(persons.concat(newPersonObject))
+        clearFields()
+      })
   }
 
   const isDuplicate = (personToCheck) => {
-    return persons.some(p => p.name === personToCheck.name)
+    return persons.find(p => p.name === personToCheck.name)
+  }
+
+  const clearFields = () => {
+    setNewName('')
+    setNewNumber('')
   }
 
   return (
     <form onSubmit={appendPerson}>
       <div>
         name: <input name="name" value={newName} onChange={handleInputField} />
-        </div>
-        <div>
+      </div>
+      <div>
         number: <input name='number' value={newNumber} onChange={handleInputField} />
       </div>
       <div>
