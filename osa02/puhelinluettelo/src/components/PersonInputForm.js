@@ -52,6 +52,7 @@ const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, 
       .catch(error => {
         setNotification(error.response.data.error, 'error')
       })
+      setNotification(`${newPerson.name} has been added!`, 'info')
   }
 
   const isDuplicate = (personToCheck) => {
