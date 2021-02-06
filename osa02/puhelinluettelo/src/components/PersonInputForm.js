@@ -1,7 +1,7 @@
 import React from 'react'
 import personsService from '../services/persons'
 
-const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
+const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setNotification }) => {
 
   const handleInputField = (event) => {
     switch (event.target.name) {
@@ -34,6 +34,10 @@ const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, 
             setPersons(persons.map(person => person.id === updatedPersonObject.id ? updatedPersonObject : person))
             clearFields()
           })
+          .catch(_ => {
+            setNotification(`${changedPerson.name} has already been removed from the server`, 'error')
+            setPersons(persons.filter(person => person.id !== changedPerson.id))
+          })
       }
       return
     }
@@ -44,6 +48,7 @@ const PersonInputForm = ({ persons, setPersons, newName, setNewName, newNumber, 
         setPersons(persons.concat(newPersonObject))
         clearFields()
       })
+      setNotification(`${newPerson.name} has been added!`, 'info')
   }
 
   const isDuplicate = (personToCheck) => {

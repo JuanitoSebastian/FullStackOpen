@@ -1,0 +1,16 @@
+.notification {
+  background-color: lightgrey;
+  border: 5px solid;
+  font-size: 24px;
+  padding: 10px;
+}
+
+#info {
+  border-color: green;
+  color: green;
+}
+
+#error {
+  border-color: red;
+  color: red;
+}
