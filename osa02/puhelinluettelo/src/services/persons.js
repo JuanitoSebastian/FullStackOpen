@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://mighty-atoll-71806.herokuapp.com/api/persons'
+const baseUrl = '/api/persons'
 
 
 const getAll = () => {
