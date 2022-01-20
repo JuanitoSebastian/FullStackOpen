@@ -51,6 +51,37 @@ describe('api post tests', () => {
     expect(contents).toContain(blogToAdd.title)
 
   })
+
+  test('adding a blog with no likes results in a blog with 0 likes', async () => {
+    const blogToAdd = {
+      title: 'Cooking With Andy McCoy',
+      author: 'Andy McCoy',
+      url: 'https://blogger.com'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogToAdd)
+      .expect(201)
+
+    const blogsAfterAdding = await helper.blogsInDb()
+    const blogToCheck = blogsAfterAdding[blogsAfterAdding.length - 1]
+    expect(blogToCheck.likes).toBe(0)
+    expect(blogToCheck.title).toBe(blogToAdd.title)
+  })
+
+  test('adding malformed blog causes error', async () => {
+    const blogToAdd = {
+      author: 'Sauli Niinistö',
+      url: 'https://instagram.com',
+      likes: 24
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogToAdd)
+      .expect(400)
+  })
 })
 
 afterAll(() => {
