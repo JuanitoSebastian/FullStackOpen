@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Warm Foods",
+  "author": "George the Cheff",
+  "url": "https://google.com",
+  "likes": 12,
+  "userId": "61eff2a37d23cf3f23d29416"
+}

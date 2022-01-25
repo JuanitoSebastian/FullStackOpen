@@ -5,7 +5,7 @@ const unknownEndpoint = (req, res) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-  logger.error(error.message)
+  logger.error(error)
 
   switch (error.name) {
 
