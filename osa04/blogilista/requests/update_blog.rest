@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/61e92cf6ed1cba1a31c65274
+Content-Type: application/json
+
+{
+  "title": "Hienoja tekstejä",
+  "author": "Rita Oksanen",
+  "url": "https://reddit.com",
+  "likes": 123
+}
