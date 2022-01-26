@@ -16,16 +16,11 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  let decodedToken = null
-
-  try {
-    decodedToken = jwt.verify(request.token, process.env.SECRET)
-  } catch (error) {
-    next(error)
-    return
+  if (request.user === null) {
+    response.status(401).json({ error: 'Login to add blogs' })
   }
 
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(request.user.id)
   const blog = new Blog({
     title: body.title,
     url: body.url,
@@ -45,10 +40,19 @@ blogsRouter.post('/', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  if (request.user === null) {
+    response.status(401).json({ error: 'Login to add blogs' })
+  }
+
   const blogIdToDelete = request.params.id
 
-  await Blog.findByIdAndRemove(blogIdToDelete)
-  response.status(204).end()
+  const blogToDelete = await Blog.findById(blogIdToDelete)
+  if (blogToDelete.user.toString() === request.user.id) {
+    await Blog.findByIdAndDelete(blogToDelete._id)
+    response.status(204).end()
+  } else {
+    response.status(403).json({ error: 'Not authorized to delete' })
+  }
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {

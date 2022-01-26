@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5pdG8iLCJpZCI6IjYxZjE3YTVkMWYyYmM5NjE4YTc3ZTljYSIsImlhdCI6MTY0MzIxNjI1OX0.CVb8LMBo9Tt2nl5wpyI1Ppqh8oh9gOy5edaxmInKGMI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5pdG8iLCJpZCI6IjYxZjE3YTVkMWYyYmM5NjE4YTc3ZTljYSIsImlhdCI6MTY0MzIxODE5MX0.Ugg8aZjN-UqKAqBI3TOMur_USbTsztTza_QrMIqcrOI
 
 {
-  "title": "Kirja 1",
-  "author": "Kirjailija A",
+  "title": "Kirja 322",
+  "author": "Kirjailija XD",
   "url": "https://hs.fi",
-  "likes": 142
+  "likes": 533
 }
