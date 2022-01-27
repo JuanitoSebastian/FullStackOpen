@@ -1,6 +1,8 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const logger = require('../utils/logger')
+const bcrypt = require('bcrypt')
+
 const initalBlogs = [
   {
     title: 'React patterns',
@@ -16,31 +18,40 @@ const initalBlogs = [
   }
 ]
 
-const initialUsers = [
+const usersDetails = [
   {
     username: 'Aapo94',
     name: 'Aapo Ahlström',
-    passwordHash: 'maajoukkue#kapiteelikirjain#PYSÄKÖINTIMITTARI'
+    password: 'maajoukkue#kapiteelikirjain#PYSÄKÖINTIMITTARI'
   },
   {
     username: 'Anna2021',
     name: 'Anna Kataja',
-    passwordHash: 'VARPAISILLAAN#LEHTINAINEN#surettaa'
+    password: 'VARPAISILLAAN#LEHTINAINEN#surettaa'
   }
 ]
+
+const createUser = async userDetails => {
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(userDetails.password, saltRounds)
+
+  const user = new User({
+    username: userDetails.username,
+    name: userDetails.name,
+    passwordHash: passwordHash
+  })
+
+  await user.save()
+}
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blogs => blogs.toJSON())
 }
 
-const usersInDb = async () => {
-  const users = await User.find({})
-  return users.map(user =>  user.toJSON())
-}
 module.exports = {
   initalBlogs,
+  usersDetails,
   blogsInDb,
-  initialUsers,
-  usersInDb
+  createUser
 }

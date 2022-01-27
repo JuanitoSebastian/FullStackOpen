@@ -18,6 +18,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
   if (request.user === null) {
     response.status(401).json({ error: 'Login to add blogs' })
+    return
   }
 
   const user = await User.findById(request.user.id)
@@ -41,7 +42,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
   if (request.user === null) {
-    response.status(401).json({ error: 'Login to add blogs' })
+    response.status(401).json({ error: 'Login to delete blogs' })
   }
 
   const blogIdToDelete = request.params.id
@@ -56,17 +57,21 @@ blogsRouter.delete('/:id', async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
+  if (request.user === null) {
+    response.status(401).json({ error: 'Login to edit blogs' })
+  }
+
   const blogIdToUpdate = request.params.id
   const body = request.body
 
-  const blogDetails = {
+  const blogUpdateDetails = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(blogIdToUpdate, blogDetails, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate(blogIdToUpdate, blogUpdateDetails, { new: true })
   if (!updatedBlog) {
     const error = { name: 'NotFoundError', message: 'Blog was not found' }
     next(error)
@@ -74,7 +79,6 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
 
   response.json(updatedBlog)
-
 })
 
 module.exports = blogsRouter

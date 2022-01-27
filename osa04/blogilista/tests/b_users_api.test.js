@@ -3,11 +3,11 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-const helper = require('./test_helper')
+const usersHelper = require('./users_api_test_helper')
 
 beforeEach(async () => {
   await User.deleteMany({})
-  for (const userToCreate of helper.initialUsers) {
+  for (const userToCreate of usersHelper.initialUsers) {
     const userObj = new User(userToCreate)
     await userObj.save()
   }
@@ -16,7 +16,7 @@ beforeEach(async () => {
 describe('get users tests', () => {
   test('initial users are returned', async () => {
     const response = await api.get('/api/users')
-    expect(response.body).toHaveLength(helper.initialUsers.length)
+    expect(response.body).toHaveLength(usersHelper.initialUsers.length)
   })
 })
 
@@ -34,8 +34,8 @@ describe('create user tests', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const usersInDb = await helper.usersInDb()
-    expect(usersInDb).toHaveLength(helper.initialUsers.length + 1)
+    const usersInDb = await usersHelper.usersInDb()
+    expect(usersInDb).toHaveLength(usersHelper.initialUsers.length + 1)
 
     const usernames = usersInDb.map(user => user.username)
     expect(usernames).toContain(userToCreate.username)
@@ -53,12 +53,13 @@ describe('create user tests', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    const usersInDb = await helper.usersInDb()
+    const usersInDb = await usersHelper.usersInDb()
 
-    expect(usersInDb).toHaveLength(helper.initialUsers.length)
+    expect(usersInDb).toHaveLength(usersHelper.initialUsers.length)
   })
 })
 
-afterAll(() => {
+afterAll(async () => {
+  await User.deleteMany({})
   mongoose.connection.close()
 })
