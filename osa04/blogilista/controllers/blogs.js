@@ -17,8 +17,7 @@ blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   if (request.user === null) {
-    response.status(401).json({ error: 'Login to add blogs' })
-    return
+    return response.status(401).json({ error: 'Login to add blogs' })
   }
 
   const user = await User.findById(request.user.id)
@@ -42,7 +41,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
   if (request.user === null) {
-    response.status(401).json({ error: 'Login to delete blogs' })
+    return response.status(401).json({ error: 'Login to delete blogs' })
   }
 
   const blogIdToDelete = request.params.id
@@ -52,13 +51,13 @@ blogsRouter.delete('/:id', async (request, response) => {
     await Blog.findByIdAndDelete(blogToDelete._id)
     response.status(204).end()
   } else {
-    response.status(403).json({ error: 'Not authorized to delete' })
+    return response.status(403).json({ error: 'Not authorized to delete' })
   }
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
   if (request.user === null) {
-    response.status(401).json({ error: 'Login to edit blogs' })
+    return response.status(401).json({ error: 'Login to edit blogs' })
   }
 
   const blogIdToUpdate = request.params.id
@@ -78,7 +77,7 @@ blogsRouter.put('/:id', async (request, response, next) => {
     return
   }
 
-  response.json(updatedBlog)
+  response.json(updatedBlog.toJSON())
 })
 
 module.exports = blogsRouter
