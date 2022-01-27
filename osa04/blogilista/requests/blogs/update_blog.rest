@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/61f252eb8a714a6f48d8c1a5
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imp1YW5pdG8iLCJpZCI6IjYxZjI1MjBiOGE3MTRhNmY0OGQ4YzE5OCIsImlhdCI6MTY0MzI3MDgwMn0.SW0dfasMqYWg7d1vbxeLWj2E0ZiHw4e1Eu458wBWUls
+
+{
+  "title": "Kirja 2",
+  "author": "Kirjailija B",
+  "url": "https://hs.fi",
+  "likes": 9
+}

@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imthcm9saW5hIiwiaWQiOiI2MWYyNTFmZDhhNzE0YTZmNDhkOGMxOTQiLCJpYXQiOjE2NDMyNzA4MzB9.CBuWW4Udov_6tF4_woeOvYgvNAx9TaD2vX_H4093rlQ
+
+{
+  "title": "Kirja 4",
+  "author": "Kirjailija D",
+  "url": "https://hs.fi",
+  "likes": 1000
+}

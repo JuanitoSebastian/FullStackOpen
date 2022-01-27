@@ -1,9 +1,0 @@
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
-
-{
-  "title": "Why does do thing",
-  "author": "Paunu Pajula",
-  "url": "https://google.com",
-  "likes": 254
-}
