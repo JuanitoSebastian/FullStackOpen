@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import BlogCreationForm from './components/BlogCreationForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
+import blogsHelper from './utils/blogs_helper'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,9 +13,12 @@ const App = () => {
   const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    const fetchBlogs = async () => {
+      const fetchedBlogs = await blogService.getAll()
+      setBlogs(blogsHelper.sortBlogsByLikes(fetchedBlogs))
+    }
+
+    fetchBlogs()
   }, [])
 
   useEffect(() => {
@@ -51,9 +55,7 @@ const App = () => {
         <Notification message={notificationMessage} type={notificationType} />
         <p>Hello {user.username}! You've logged in.</p> <button onClick={logOut}>Log out</button>
         <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
+        <BlogList blogs={blogs} setBlogs={setBlogs} />
         <h2>Create new</h2>
         <BlogCreationForm blogs={blogs} setBlogs={setBlogs} displayNotification={displayNotification} />
       </div>
