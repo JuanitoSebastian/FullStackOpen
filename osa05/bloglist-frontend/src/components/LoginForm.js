@@ -1,0 +1,44 @@
+import React, { useState } from 'react'
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+import logger from '../utils/logger'
+
+const LoginForm = ({ setUser, displayNotification }) => {
+
+  const [username, setUsername] = useState([])
+  const [password, setPassword] = useState([])
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    
+    try {
+      const fetchedUser = await loginService.login({
+        username, password
+      })
+      window.localStorage.setItem(
+        'loggedBloglistUser', JSON.stringify(fetchedUser)
+      )
+      blogService.setToken(fetchedUser.token)
+      setUser(fetchedUser)
+    } catch (excecption) {
+      logger.error(`Logging in failed: ${excecption}`)
+      displayNotification('Wrong username or password 😢', 'error')
+    }
+  }
+
+  return (
+      <form onSubmit={handleLogin}>
+        <label>
+          Username:
+          <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
+        </label>
+        <label>
+          Password:
+          <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+        </label>
+        <button type="submit">Login</button>
+      </form>
+  )
+}
+
+export default LoginForm
