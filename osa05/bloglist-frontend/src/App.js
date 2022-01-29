@@ -53,7 +53,7 @@ const App = () => {
     : (
       <div>
         <Notification message={notificationMessage} type={notificationType} />
-        <p>Hello {user.username}! You've logged in.</p> <button onClick={logOut}>Log out</button>
+        <p>Hello {user.username}! You have logged in.</p> <button onClick={logOut}>Log out</button>
         <h2>blogs</h2>
         <BlogList blogs={blogs} setBlogs={setBlogs} displayNotification={displayNotification} />
         <h2>Create new</h2>

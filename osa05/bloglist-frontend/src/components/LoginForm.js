@@ -11,7 +11,7 @@ const LoginForm = ({ setUser, displayNotification }) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const fetchedUser = await loginService.login({
         username, password
@@ -28,17 +28,17 @@ const LoginForm = ({ setUser, displayNotification }) => {
   }
 
   return (
-      <form onSubmit={handleLogin}>
-        <label>
+    <form onSubmit={handleLogin}>
+      <label>
           Username:
-          <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
-        </label>
-        <label>
+        <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
+      </label>
+      <label>
           Password:
-          <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
-        </label>
-        <button type="submit">Login</button>
-      </form>
+        <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+      </label>
+      <button type="submit">Login</button>
+    </form>
   )
 }
 

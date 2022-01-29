@@ -10,7 +10,7 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost }) => {
       <p>{blog.title} by {blog.author} <button onClick={() => setDisplayMore(true)}>View</button></p>
     </div>
   )
-  
+
   const BlogLarge = () => (
     <div className="blog-post">
       <p>{blog.title} by {blog.author} <button onClick={() => setDisplayMore(false)}>Hide</button></p>
