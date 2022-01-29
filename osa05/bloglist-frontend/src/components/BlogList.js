@@ -2,6 +2,7 @@ import React from 'react'
 import blogService from '../services/blogs'
 import Blog from './Blog'
 import blogsHelper from '../utils/blogs_helper'
+import PropTypes from 'prop-types'
 
 const BlogList = ({ blogs, setBlogs, displayNotification }) => {
 
@@ -42,6 +43,12 @@ const BlogList = ({ blogs, setBlogs, displayNotification }) => {
       )}
     </div>
   )
+}
+
+BlogList.propTypes = {
+  blogs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  displayNotification: PropTypes.func.isRequired
 }
 
 export default BlogList
