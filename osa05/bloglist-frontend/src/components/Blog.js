@@ -34,7 +34,8 @@ Blog.propTypes = {
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     likes: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired
   }),
   likeBlogPost: PropTypes.func.isRequired,
   deleteBlogPost: PropTypes.func.isRequired

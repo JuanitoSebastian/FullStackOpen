@@ -43,6 +43,13 @@ const App = () => {
     }, 5000)
   }
 
+  const createBlogPost = async (blogPostToCreate) => {
+    const newBlogObj = await blogService.create(blogPostToCreate)
+    setBlogs([...blogs, newBlogObj])
+
+    displayNotification(`${newBlogObj.title} by ${newBlogObj.author} was added! 🤠`)
+  }
+
   return user === null
     ? (
       <div>
@@ -57,7 +64,7 @@ const App = () => {
         <h2>blogs</h2>
         <BlogList blogs={blogs} setBlogs={setBlogs} displayNotification={displayNotification} />
         <h2>Create new</h2>
-        <BlogCreationForm blogs={blogs} setBlogs={setBlogs} displayNotification={displayNotification} />
+        <BlogCreationForm blogs={blogs} createBlogPost={createBlogPost} />
       </div>
     )
 }

@@ -31,6 +31,7 @@ blogsRouter.post('/', async (request, response, next) => {
 
   try {
     const savedBlog = await blog.save()
+    await Blog.populate(savedBlog, { path: 'user' })
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
     response.status(201).json(savedBlog.toJSON())

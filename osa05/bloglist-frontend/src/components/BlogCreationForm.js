@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const BlogCreationForm = ({ blogs, setBlogs, displayNotification }) => {
+const BlogCreationForm = ({ createBlogPost }) => {
 
   const [title, setTitle] = useState([])
   const [author, setAuthor] = useState([])
@@ -26,10 +25,7 @@ const BlogCreationForm = ({ blogs, setBlogs, displayNotification }) => {
       url: url
     }
 
-    const newBlogObj = await blogService.create(blogToCreate)
-    setBlogs([...blogs, newBlogObj])
-
-    displayNotification(`${newBlogObj.title} by ${newBlogObj.author} was added! 🤠`)
+    await createBlogPost(blogToCreate)
 
     setTitle('')
     setAuthor('')
@@ -65,9 +61,7 @@ const BlogCreationForm = ({ blogs, setBlogs, displayNotification }) => {
 }
 
 BlogCreationForm.propTypes = {
-  blogs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  displayNotification: PropTypes.func.isRequired
+  createBlogPost: PropTypes.func.isRequired
 }
 
 export default BlogCreationForm
