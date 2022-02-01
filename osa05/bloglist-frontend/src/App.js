@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import BlogList from './components/BlogList'
+import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogCreationForm from './components/BlogCreationForm'
 import Notification from './components/Notification'
@@ -50,6 +50,37 @@ const App = () => {
     displayNotification(`${newBlogObj.title} by ${newBlogObj.author} was added! 🤠`)
   }
 
+  const deleteBlogPost = async (blog) => {
+    if (window.confirm(`Delete ${blog.title}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+        displayNotification(`${blog.title} was removed 🤠`)
+      } catch (exception) {
+        displayNotification(`Unable to delete ${blog.title} 😔`, 'error')
+      }
+    }
+  }
+
+  const likeBlogPost = async (blog) => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+
+    try {
+      await blogService.update(updatedBlog)
+      setBlogs(
+        blogsHelper.sortBlogsByLikes(
+          blogs.map(blogObject => blogObject.id !== blog.id
+            ? blogObject
+            : updatedBlog
+          )
+        )
+      )
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
+
 
   return user === null
     ? (
@@ -63,7 +94,11 @@ const App = () => {
         <Notification message={notificationMessage} type={notificationType} />
         <p>Hello {user.username}! You have logged in.</p> <button onClick={logOut}>Log out</button>
         <h2>blogs</h2>
-        <BlogList blogs={blogs} setBlogs={setBlogs} displayNotification={displayNotification} />
+        <div>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} deleteBlogPost={() => deleteBlogPost(blog)} likeBlogPost={() => likeBlogPost(blog)} />
+          )}
+        </div>
         <h2>Create new</h2>
         <BlogCreationForm blogs={blogs} createBlogPost={createBlogPost} />
       </div>
