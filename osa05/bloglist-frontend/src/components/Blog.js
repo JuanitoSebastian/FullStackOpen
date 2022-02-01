@@ -7,17 +7,17 @@ const Blog = ({ blog, likeBlogPost, deleteBlogPost }) => {
 
   const BlogSmall = () => (
     <div className="blog-post">
-      <p>{blog.title} by {blog.author} <button onClick={() => setDisplayMore(true)}>View</button></p>
+      <p>{blog.title} by {blog.author} <button id='expand-blog-button' onClick={() => setDisplayMore(true)}>View</button></p>
     </div>
   )
 
   const BlogLarge = () => (
     <div className="blog-post">
       <p>{blog.title} by {blog.author} <button onClick={() => setDisplayMore(false)}>Hide</button></p>
-      <p>{blog.likes} likes <button onClick={() => likeBlogPost(blog)}>Like</button></p>
+      <p>{blog.likes} likes <button id='like-blog-button' onClick={likeBlogPost}>Like</button></p>
       <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a><br />
       <p>Added by <i>{blog.user.username}</i></p>
-      <button onClick={() => deleteBlogPost(blog)}>Remove</button>
+      <button onClick={deleteBlogPost}>Remove</button>
     </div>
   )
 
@@ -43,3 +43,4 @@ Blog.propTypes = {
 
 
 export default Blog
+

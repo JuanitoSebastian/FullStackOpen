@@ -50,6 +50,7 @@ const App = () => {
     displayNotification(`${newBlogObj.title} by ${newBlogObj.author} was added! 🤠`)
   }
 
+
   return user === null
     ? (
       <div>

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 
 const BlogList = ({ blogs, setBlogs, displayNotification }) => {
 
+
   const deleteBlogPost = async (blog) => {
     if (window.confirm(`Delete ${blog.title}?`)) {
       try {
@@ -36,10 +37,11 @@ const BlogList = ({ blogs, setBlogs, displayNotification }) => {
     }
   }
 
+
   return (
     <div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlogPost={likeBlogPost} deleteBlogPost={deleteBlogPost} />
+        <Blog key={blog.id} blog={blog} deleteBlogPost={() => deleteBlogPost(blog)} likeBlogPost={() => likeBlogPost(blog)} />
       )}
     </div>
   )

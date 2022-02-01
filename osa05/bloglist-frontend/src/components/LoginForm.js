@@ -31,13 +31,13 @@ const LoginForm = ({ setUser, displayNotification }) => {
     <form onSubmit={handleLogin}>
       <label>
           Username:
-        <input type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
+        <input id="username" type="text" value={username} onChange={({ target }) => setUsername(target.value)} />
       </label>
       <label>
           Password:
-        <input type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
+        <input id="password" type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
       </label>
-      <button type="submit">Login</button>
+      <button id="login-button" type="submit">Login</button>
     </form>
   )
 }
