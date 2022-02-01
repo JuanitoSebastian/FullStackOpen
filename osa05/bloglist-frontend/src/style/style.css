@@ -1,0 +1,24 @@
+.notification {
+  background-color: lightgray;
+  border: solid green 5px;
+  padding: 10px;
+  margin: 10px;
+  color: green;
+  font-size: 20px;
+}
+
+.error {
+  background-color: lightgray;
+  border: solid red 5px;
+  padding: 10px;
+  margin: 10px;
+  color: red;
+  font-size: 20px;
+}
+
+.blog-post {
+  border: solid #171D1E 1px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #E0E0E0;
+}
