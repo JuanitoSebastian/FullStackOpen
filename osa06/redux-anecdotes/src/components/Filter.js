@@ -23,8 +23,8 @@ const Filter = (props) => {
   )
 }
 
-const ConnectedFilter = connect(null, { 
-  setFilter, resetFilter 
+const ConnectedFilter = connect(null, {
+  setFilter, resetFilter
 })(Filter)
 
 export default ConnectedFilter

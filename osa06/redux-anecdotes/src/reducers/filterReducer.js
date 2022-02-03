@@ -1,16 +1,15 @@
 const initialState = null
 
 const filterReducer = (state = initialState, action) => {
-  console.log(`filter state: ${state}`)
   switch (action.type) {
-    case 'SET_FILTER':
-      return action.data.content
+  case 'SET_FILTER':
+    return action.data.content
 
-    case 'RESET_FILTER':
-      return initialState
+  case 'RESET_FILTER':
+    return initialState
 
-    default:
-      return state
+  default:
+    return state
   }
 }
 

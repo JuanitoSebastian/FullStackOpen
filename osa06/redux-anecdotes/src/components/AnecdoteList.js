@@ -30,7 +30,7 @@ const AnecdoteList = () => {
           </div>
         </div>
       )}
-    </div> 
+    </div>
   )
 }
 

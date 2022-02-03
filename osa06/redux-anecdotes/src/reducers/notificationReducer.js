@@ -5,18 +5,15 @@ const intialState = {
 let timer
 
 const notificationReducer = (state = intialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-
   switch (action.type) {
-    case 'DISPLAY_NOTIFICATION':
-      return { ...state, message: action.data }
+  case 'DISPLAY_NOTIFICATION':
+    return { ...state, message: action.data }
 
-    case 'RESET_NOTIFICATION':
-      return intialState
+  case 'RESET_NOTIFICATION':
+    return intialState
 
-    default: 
-      return state
+  default:
+    return state
   }
 }
 
