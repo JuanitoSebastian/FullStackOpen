@@ -8,7 +8,7 @@ const notificationReducer = (state = intialState, action) => {
 
   switch (action.type) {
     case 'DISPLAY_NOTIFICATION':
-      return { ...state, message: action.data.content }
+      return { ...state, message: action.data }
 
     case 'RESET_NOTIFICATION':
       return intialState
@@ -18,12 +18,16 @@ const notificationReducer = (state = intialState, action) => {
   }
 }
 
-export const displayNotification = (message) => {
-  return {
-    type: 'DISPLAY_NOTIFICATION',
-    data: {
-      content: message
-    }
+export const displayNotification = (message, time = 5) => {
+  return async dispatch => {
+    dispatch({
+      type: 'DISPLAY_NOTIFICATION',
+      data: message
+    })
+
+    setTimeout(() => {
+      dispatch(resetNotification)
+    }, (time * 1000))
   }
 }
 
