@@ -32,13 +32,18 @@
     },
     {
       "content": "Life is a bih",
-      "votes": 1,
+      "votes": 2,
       "id": "6Fzjqyl"
     },
     {
       "content": "Matto, kuin katto mutta lattialla",
       "votes": 2,
       "id": "WNw0dYI"
+    },
+    {
+      "content": "Any fool can write react-redux",
+      "votes": 1,
+      "id": "j_AlB-h"
     }
   ]
 }

@@ -23,8 +23,10 @@ export const setFilter = (text) => {
   }
 }
 
-export const resetFilter = {
-  type: 'RESET_FILTER'
+export const resetFilter = () =>  {
+  return {
+    type: 'RESET_FILTER'
+  }
 }
 
 export default filterReducer
