@@ -3,8 +3,12 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import logger from '../utils/logger'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { displayNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, displayNotification }) => {
+const LoginForm = ({ setUser }) => {
+
+  const dispatch = useDispatch()
 
   const [username, setUsername] = useState([])
   const [password, setPassword] = useState([])
@@ -23,7 +27,8 @@ const LoginForm = ({ setUser, displayNotification }) => {
       setUser(fetchedUser)
     } catch (excecption) {
       logger.error(`Logging in failed: ${excecption}`)
-      displayNotification('Wrong username or password 😢', 'error')
+
+      dispatch(displayNotification('Wrong username or password 😢', 'error'))
     }
   }
 

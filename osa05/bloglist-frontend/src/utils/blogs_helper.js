@@ -1,3 +1,5 @@
+// TODO: Get rid of this file
+
 const sortBlogsByLikes = (blogsToSort) => {
   return [...blogsToSort].sort((previous, next) => previous.likes > next.likes ? 1 : -1).reverse()
 }

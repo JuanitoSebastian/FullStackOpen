@@ -138,7 +138,7 @@ describe('Blogs app', function() {
       cy.contains(`${blogsToCreate[0].title} by ${blogsToCreate[0].author}`)
       cy.contains('View').click()
       cy.contains('Remove').click()
-      cy.contains(`Unable to delete ${blogsToCreate[0].title}`)
+      cy.contains(`Could not delete ${blogsToCreate[0].title}`)
     })
   })
 

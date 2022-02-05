@@ -78,6 +78,8 @@ blogsRouter.put('/:id', async (request, response, next) => {
     return
   }
 
+  await Blog.populate(updatedBlog, { path: 'user' })
+
   response.json(updatedBlog.toJSON())
 })
 
