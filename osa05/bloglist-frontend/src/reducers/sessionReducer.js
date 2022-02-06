@@ -4,7 +4,7 @@ import { displayNotification } from './notificationReducer'
 
 const initialState = null
 
-const userReducer = (state = initialState, action) => {
+const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'SET_USER':
     return action.data
@@ -41,4 +41,4 @@ export const clearUser = {
   type: 'CLEAR_USER'
 }
 
-export default userReducer
+export default sessionReducer
