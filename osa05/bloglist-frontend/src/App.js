@@ -13,7 +13,8 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogCreationForm from './components/BlogCreationForm'
 import Notification from './components/Notification'
-import UsersView from './components/UsersView'
+import UsersList from './components/UsersList'
+import User from './components/User'
 
 const App = () => {
   const currentSession = useSelector(state => state.session)
@@ -53,8 +54,11 @@ const App = () => {
         <p>Hello {currentSession.username}! You have logged in.</p> <button onClick={logOut}>Log out</button>
         <h2>blogs</h2>
         <Switch>
+          <Route path='/users/:id'>
+            <User />
+          </Route>
           <Route path='/users'>
-            <UsersView />
+            <UsersList />
           </Route>
           <Route path='/'>
             <div>
