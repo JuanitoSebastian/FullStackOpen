@@ -1,46 +1,42 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
+import { useRouteMatch, useHistory } from 'react-router-dom'
 
-const Blog = ({ blog, likeBlogPost, deleteBlogPost }) => {
+const Blog = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
 
-  const [displayMore, setDisplayMore] = useState(false)
+  const blogs = useSelector(state => state.blogs)
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blogToDisplay = blogMatch
+    ? blogs.find(blog => blog.id === blogMatch.params.id)
+    : null
 
-  const BlogSmall = () => (
-    <div className="blog-post">
-      <p>{blog.title} by {blog.author} <button id='expand-blog-button' onClick={() => setDisplayMore(true)}>View</button></p>
-    </div>
-  )
+  if (!blogToDisplay) {
+    return null
+  }
 
-  const BlogLarge = () => (
-    <div className="blog-post">
-      <p>{blog.title} by {blog.author} <button onClick={() => setDisplayMore(false)}>Hide</button></p>
-      <p>{blog.likes} likes <button id='like-blog-button' onClick={likeBlogPost}>Like</button></p>
-      <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a><br />
-      <p>Added by <i>{blog.user.username}</i></p>
-      <button onClick={deleteBlogPost}>Remove</button>
-    </div>
-  )
+  const handleLike = () => {
+    dispatch(likeBlog(blogToDisplay))
+  }
+
+  const handleDelete = () => {
+    if (window.confirm(`Delete ${blogToDisplay.title}?`)) {
+      dispatch(deleteBlog(blogToDisplay))
+      history.push('/')
+    }
+  }
 
   return (
-    displayMore
-      ? <BlogLarge />
-      : <BlogSmall />
+    <div className="blog-post">
+      <h2>{blogToDisplay.title} by {blogToDisplay.author}</h2>
+      <p>{blogToDisplay.likes} likes</p>
+      <p>Added by <i>{blogToDisplay.user.username}</i> <button type='button' onClick={handleLike}>Like</button></p>
+      <button type='button' onClick={handleDelete}>Delete</button>
+    </div>
   )
-
 }
-
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    likes: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-    user: PropTypes.object.isRequired
-  }),
-  likeBlogPost: PropTypes.func.isRequired,
-  deleteBlogPost: PropTypes.func.isRequired
-}
-
 
 export default Blog
 
