@@ -2,19 +2,21 @@ import React, { useEffect } from 'react'
 import blogService from './services/blogs'
 import { useSelector, useDispatch } from 'react-redux'
 import { initBlogs } from './reducers/blogsReducer'
-import { setUser, clearUser } from './reducers/sessionReducer'
+import { setUser } from './reducers/sessionReducer'
 import { initUsers } from './reducers/usersReducer'
 
 import {
   Switch, Route
 } from 'react-router-dom'
 
+import BlogListEntry from './components/BlogListEntry'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogCreationForm from './components/BlogCreationForm'
 import Notification from './components/Notification'
 import UsersList from './components/UsersList'
 import User from './components/User'
+import Menu from './components/Menu'
 
 const App = () => {
   const currentSession = useSelector(state => state.session)
@@ -36,11 +38,6 @@ const App = () => {
     }
   }, [dispatch])
 
-  const logOut = () => {
-    window.localStorage.clear()
-    dispatch(clearUser)
-  }
-
   return currentSession === null
     ? (
       <div>
@@ -51,7 +48,7 @@ const App = () => {
     : (
       <div>
         <Notification />
-        <p>Hello {currentSession.username}! You have logged in.</p> <button onClick={logOut}>Log out</button>
+        <Menu />
         <h2>blogs</h2>
         <Switch>
           <Route path='/users/:id'>
@@ -60,10 +57,13 @@ const App = () => {
           <Route path='/users'>
             <UsersList />
           </Route>
+          <Route path='/blogs/:id'>
+            <Blog />
+          </Route>
           <Route path='/'>
             <div>
               {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} />
+                <BlogListEntry key={blog.id} blog={blog} />
               )}
             </div>
             <h2>Create new</h2>

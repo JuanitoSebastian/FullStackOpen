@@ -22,3 +22,16 @@
   margin: 10px;
   background-color: #E0E0E0;
 }
+
+ul.navigation {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: whitesmoke;
+}
+
+.navigation li {
+  display: inline;
+  padding: 5px;
+}
+

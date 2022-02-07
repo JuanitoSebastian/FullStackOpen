@@ -18,12 +18,23 @@ const User = () => {
     <div>
       <h2>{userToDisplay.username}</h2>
       <h3>Added blogs</h3>
-      <ul>
-        {userToDisplay.blogs.map(blog =>
-          <li key={blog.id}>{blog.title}</li>
-        )}
-      </ul>
+      <UserBlogsToDisplay blogs={userToDisplay.blogs} />
     </div>
+  )
+}
+
+const UserBlogsToDisplay = ({ blogs }) => {
+  if (blogs.length === 0) {
+    return (
+      <p>No blogs created yet 🤷‍♂️</p>
+    )
+  }
+  return (
+    <ul>
+      {blogs.map(blog =>
+        <li key={blog.id}>{blog.title}</li>
+      )}
+    </ul>
   )
 }
 
