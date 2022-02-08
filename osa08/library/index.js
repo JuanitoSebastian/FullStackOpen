@@ -71,9 +71,28 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      const allBooks = await Book.find({})
+      if (!args.author && !args.genre) {
+        const allBooks = await Book.find({})
+          .populate('author', { id: 1, name: 1, born: 1 })
+        return allBooks
+      }
+
+      let authorToDisplay
+
+      if (args.author) {
+        authorToDisplay = await Author.findOne({ name: args.author })
+      }
+
+      const filters = {
+        author: authorToDisplay ? authorToDisplay._id : undefined,
+        genres: args.genre
+      }
+
+      Object.keys(filters).forEach(key => filters[key] === undefined && delete filters[key])
+
+      const filteredBooks = await Book.find({ ...filters })
         .populate('author', { id: 1, name: 1, born: 1 })
-      return allBooks
+      return filteredBooks
     },
     allAuthors: async () => {
       const fetchedAuthors = await Author.find({})
@@ -115,7 +134,8 @@ const resolvers = {
         const book = new Book({
           title: args.title,
           published: args.published,
-          author: author._id
+          author: author._id,
+          genres: args.genres
         })
 
         const savedBook = await book.save()
