@@ -1,9 +1,7 @@
 const lintingRules = {
   'env': {
     'browser': true,
-    'es6': true,
-    'jest/globals': true,
-    'cypress/globals': true
+    'es6': true
   },
   'extends': [
     'eslint:recommended',
@@ -17,7 +15,7 @@ const lintingRules = {
     'sourceType': 'module'
   },
   'plugins': [
-    'react', 'jest', 'cypress'
+    'react'
   ],
   'rules': {
     'indent': [

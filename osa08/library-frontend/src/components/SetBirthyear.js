@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries/queries'
+import React from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries/queries'
 
 const SetBirthyear = () => {
   const response = useQuery(ALL_AUTHORS)
+  const [ setBirthyear ] = useMutation(SET_BIRTHYEAR, {
+    refetchQueries: [ { query: ALL_AUTHORS } ]
+  })
 
   if (response.loading) {
     return <div>Loading...</div>
@@ -13,23 +16,28 @@ const SetBirthyear = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    const authorToSet = event.target.author.value
+    const birthyearToSet = Number(event.target.birthyear.value)
+    setBirthyear( { variables: { name: authorToSet, setBornTo: birthyearToSet } } )
   }
 
   return (
     <div>
       <h2>Set Birthyear</h2>
       <form onSubmit={handleSubmit}>
-        <label for='author'>Auhtor: </label>
-        <select name='author'>
-          { authors.map(author => 
-            <option value={author.name}>{author.name}</option>
-          ) }
-        </select>
-        <br />
-        <label for='author'>Birthyear: </label>
-        <input type='number' />
-        <br />
-        <button type='submit'>Set Birthyear</button>
+        <fieldset disabled={ authors.length === 0 }>
+          <label forhtml='author'>Auhtor: </label>
+          <select name='author'>
+            { authors.map(author =>
+              <option key={author.id} value={author.name}>{author.name}</option>
+            ) }
+          </select>
+          <br />
+          <label forhtml='author'>Born: </label>
+          <input name='birthyear' type='number' />
+          <br />
+          <button type='submit'>Update author</button>
+        </fieldset>
       </form>
     </div>
   )
