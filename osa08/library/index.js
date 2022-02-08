@@ -92,7 +92,7 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
       if (!currentUser) {
-        throw new AuthenticationError('Please log in to continue')
+        throw new Error('Please log in to continue')
       }
 
       let author = await Author.findOne({ name: args.author })
