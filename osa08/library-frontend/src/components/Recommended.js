@@ -18,13 +18,12 @@ const Recommended = (props) => {
 
   }, [meQueryResult.data])
 
-  if (booksQueryResult.loading || meQueryResult.loading) {
+  if (booksQueryResult.loading || meQueryResult.loading || !booksQueryResult.data || !meQueryResult.data ) {
     return <div>Loading...</div>
   }
 
-  const books = booksQueryResult.data
-    ? booksQueryResult.data.allBooks
-    : undefined
+  const books = booksQueryResult.data.allBooks
+  const me = meQueryResult.data.me
 
   const BookList = () => {
     if (books && books.length > 0) {
@@ -48,7 +47,7 @@ const Recommended = (props) => {
   return (
     <div>
       <h2>recommended books</h2>
-      <p>Your favorite genre is <b>{meQueryResult.data.me.favoriteGenre}</b>. Here are some books:</p>
+      <p>Your favorite genre is <b>{me.favoriteGenre}</b>. Here are some books:</p>
       <table>
         <thead>
           <tr>
