@@ -2,7 +2,7 @@ import React from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries/queries'
 
-const SetBirthyear = () => {
+const SetBirthyear = (props) => {
   const response = useQuery(ALL_AUTHORS)
   const [ setBirthyear ] = useMutation(SET_BIRTHYEAR, {
     refetchQueries: [ { query: ALL_AUTHORS } ]
@@ -25,7 +25,7 @@ const SetBirthyear = () => {
     <div>
       <h2>Set Birthyear</h2>
       <form onSubmit={handleSubmit}>
-        <fieldset disabled={ authors.length === 0 }>
+        <fieldset disabled={ authors.length === 0 || !props.token }>
           <label forhtml='author'>Auhtor: </label>
           <select name='author'>
             { authors.map(author =>

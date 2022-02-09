@@ -10,7 +10,7 @@ const Authors = (props) => {
     return null
   }
 
-  if (result.loading) {
+  if (result.loading || !result.data) {
     return <div>Loading...</div>
   }
 
@@ -41,7 +41,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <SetBirthyear />
+      <SetBirthyear token={props.token} />
     </div>
   )
 }

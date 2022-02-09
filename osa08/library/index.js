@@ -1,4 +1,3 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 const config = require('./utils/config')
 const mongoose = require('mongoose')
@@ -6,6 +5,11 @@ const logger = require('./utils/logger')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
+const { PubSub } = require('graphql-subscriptions')
+const server = require('./server')
+const { gql, UserInputError } = require('apollo-server-express')
+
+const pubsub = new PubSub()
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
@@ -64,6 +68,9 @@ const typeDefs = gql`
       username: String!,
       password: String!
     ): Token
+  },
+  type Subscription {
+    bookAdded: Book!
   }
 `
 
@@ -149,13 +156,15 @@ const resolvers = {
         })
 
         const savedBook = await book.save()
-        await Book.populate(book, { path: 'author' })
+        await Book.populate(savedBook, { path: 'author' })
+        pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
         return savedBook
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args
         })
       }
+
     },
     editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
@@ -204,26 +213,12 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, config.JWT_SECRET) }
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    }
   }
 }
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLocaleLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(
-        auth.substring(7), config.JWT_SECRET
-      )
-      const currentUser = await User
-        .findById(decodedToken.id)
-
-      return { currentUser }
-    }
-  }
-})
-
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+server.startApolloServer(typeDefs, resolvers)
