@@ -34,6 +34,7 @@ const NewBook = (props) => {
     const publishedInt = Number(published)
 
     createBook({ variables: { title, author, published: publishedInt, genres } })
+    props.displayNotification(`Added ${title} by ${author}`)
 
     setTitle('')
     setPublished('')
