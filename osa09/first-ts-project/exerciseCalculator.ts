@@ -13,7 +13,7 @@ interface ExerciseValues {
   target: number;
 }
 
-const parseArgs = (args: Array<string>): ExerciseValues => {
+export const parseArgs = (args: Array<string>): ExerciseValues => {
   if (args.length < 4) {
     throw new Error('Please provide traget value and daily exercise data');
   }
@@ -22,7 +22,7 @@ const parseArgs = (args: Array<string>): ExerciseValues => {
     throw new Error('Provided values were not numbers!');
   }
 
-  const target: number = Number(args[2]);
+  const target = Number(args[2]);
   const data: Array<number> = args.slice(3).map(value => Number(value));
 
   if (data.includes(NaN)) {
@@ -32,10 +32,10 @@ const parseArgs = (args: Array<string>): ExerciseValues => {
   return {
     data,
     target
-  }
-}
+  };
+};
 
-const calculateExercise = (values: ExerciseValues): Result => {
+export const calculateExercise = (values: ExerciseValues): Result => {
 
   const periodLength: number = values.data.length;
   const trainingDays: number = values.data.filter(value => value > 0).length;
@@ -52,9 +52,9 @@ const calculateExercise = (values: ExerciseValues): Result => {
     ratingDescription: generateRatingDescription(rating),
     target: values.target,
     average
-  }
+  };
 
-}
+};
 
 const generateRatingDescription = (rating: number): string => {
   switch (rating) {
@@ -62,6 +62,4 @@ const generateRatingDescription = (rating: number): string => {
   case 2: return 'not too bad but could be better';
   default: return 'try harder next time!';
   }
-}
-
-console.log(calculateExercise(parseArgs(process.argv)));
+};
