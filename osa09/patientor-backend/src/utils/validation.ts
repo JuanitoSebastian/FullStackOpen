@@ -12,18 +12,6 @@ const parseString = (text: unknown): string => {
   return text;
 };
 
-const parseStringOptional = (text: unknown): string | undefined => {
-  if (text === undefined) {
-    return text;
-  }
-
-  if (!isString(text)) {
-    throw new Error('Incorrect type');
-  }
-
-  return text;
-};
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isGender = (param: any): param is Gender => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -42,11 +30,7 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 
-const parseDate = (date: unknown): string | undefined => {
-  if (date === undefined) {
-    return date;
-  }
-
+const parseDate = (date: unknown): string => {
   if (!isString(date) || !isDate(date)) {
     throw new Error('Incorrect date: ' + date);
   }
@@ -60,9 +44,10 @@ const toNewPatient = ({ name, gender, occupation, ssn, dateOfBirth } : Fields): 
   const newPatient: NewPatient = {
     name: parseString(name),
     occupation: parseString(occupation),
-    ssn: parseStringOptional(ssn),
+    ssn: parseString(ssn),
     gender: parseGender(gender),
-    dateOfBirth: parseDate(dateOfBirth)
+    dateOfBirth: parseDate(dateOfBirth),
+    entries: []
   };
 
   return newPatient;

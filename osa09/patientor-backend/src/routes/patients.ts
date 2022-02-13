@@ -8,6 +8,18 @@ router.get('/', (_request, response) => {
   response.send(patientsService.getAllNonSensitive());
 });
 
+router.get('/:id', (request, response) => {
+  const id = request.params.id;
+  const patient = patientsService.getById(id);
+  console.log('Getting patient: ', id);
+
+  if (patient) {
+    response.send(patient);
+  } else {
+    response.status(404);
+  }
+});
+
 router.post('/', (request, response) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
