@@ -1,6 +1,6 @@
 import { v1 as uuid } from 'uuid';
 import { Patient, NonSensitivePatient, NewPatient } from "../types";
-import patientsData from '../../data/patients.json';
+import patientsData from '../../data/patients';
 import toNewPatient from '../utils/validation';
 
 const patients: Patient[] = patientsData.map(obj => {
