@@ -4,8 +4,8 @@ export interface Diagnosis {
   latin?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type Entry = HealthCheckEntry | OccupationalHealthCareEntry | HospitalEntry;
+export type NewEntry = NewHealthCheckEntry | NewOccupationalHealthCareEntry | NewHospitalEntry;
 
 interface BaseEntry {
   id: string;
@@ -15,11 +15,13 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
+
 export enum HealthCheckRating {
-  Healthy = 0,
   LowRisk = 1,
   HighRisk = 2,
-  CriticalRisk = 3
+  CriticalRisk = 3,
+  Healthy = 0
 }
 
 export interface HealthCheckEntry extends BaseEntry {
@@ -27,23 +29,29 @@ export interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+
 export interface OccupationalHealthCareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
   sickLeave?: SickLeave;
 }
 
+export type NewOccupationalHealthCareEntry = Omit<OccupationalHealthCareEntry, 'id'>;
+
 export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
   discharge: Discharge;
 }
 
-interface Discharge {
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>;
+
+export interface Discharge {
   date: string;
   criteria: string;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string,
   endDate: string
 }
