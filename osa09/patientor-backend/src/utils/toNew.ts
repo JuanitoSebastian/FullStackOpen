@@ -1,12 +1,13 @@
-import { Entry, HealthCheckEntry, HospitalEntry, NewBaseEntry, NewHealthCheckEntry, NewHospitalEntry, NewOccupationalHealthCareEntry, NewPatient, OccupationalHealthCareEntry } from "../types";
-import { isString, parseDate, parseDiagnosisCodes, parseDischarge, parseGender, parseHealthCheckRating, parseSickLeave, parseString } from "./validation";
+import { Entry, NewBaseEntry, NewEntry, NewHealthCheckEntry, NewHospitalEntry, NewOccupationalHealthCareEntry, NewPatient } from "../types";
+import { parseDate, parseDiagnosisCodes, parseDischarge, parseGender, parseHealthCheckRating, parseSickLeave, parseString } from "./validation";
+import { v1 as uuid } from 'uuid';
 
-type NewBaseEntryFields = {
-  description: unknown, 
-  date: unknown, 
-  specialist: unknown, 
-  diagnosisCodes: unknown
-};
+interface NewBaseEntryFields {
+  description: unknown; 
+  date: unknown; 
+  specialist: unknown;
+  diagnosisCodes: unknown;
+}
 
 const toNewBaseEntry = (
   { description, date, specialist, diagnosisCodes } :  NewBaseEntryFields
@@ -20,13 +21,9 @@ const toNewBaseEntry = (
   return newEntry;
 };
 
-type NewHospitalEntryFields = {
-  description: unknown, 
-  date: unknown, 
-  specialist: unknown, 
-  diagnosisCodes: unknown, 
-  discharge: unknown
-};
+interface NewHospitalEntryFields extends NewBaseEntryFields {
+  discharge: unknown;
+}
 
 const toNewHospitalEntry = (
   { description, date, specialist, diagnosisCodes, discharge } : NewHospitalEntryFields
@@ -40,14 +37,10 @@ const toNewHospitalEntry = (
   return newEntry;
 };
 
-type NewOccupationalHealthCareEntryFields = { 
-  description: unknown, 
-  date: unknown, 
-  specialist: unknown, 
-  diagnosisCodes: unknown, 
-  employerName: unknown,
-  sickLeave: unknown
-};
+interface NewOccupationalHealthCareEntryFields extends NewBaseEntryFields { 
+  employerName: unknown;
+  sickLeave: unknown;
+}
 
 const toNewOccupationalHealthCareEntry = (
   { description, date, specialist, diagnosisCodes, employerName, sickLeave }: NewOccupationalHealthCareEntryFields
@@ -63,13 +56,9 @@ const toNewOccupationalHealthCareEntry = (
   return newEntry;
 };
 
-type NewHealthCheckEntryFields = { 
-  description: unknown, 
-  date: unknown, 
-  specialist: unknown, 
-  diagnosisCodes: unknown, 
-  healthCheckRating: unknown 
-};
+interface NewHealthCheckEntryFields extends NewBaseEntryFields { 
+  healthCheckRating: unknown;
+}
 
 const toNewHealthCheckEntry = (
   { description, date, specialist, diagnosisCodes, healthCheckRating }: NewHealthCheckEntryFields
@@ -84,18 +73,18 @@ const toNewHealthCheckEntry = (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const toNewEntry = (entry: any): NewHealthCheckEntry | NewHospitalEntry | NewOccupationalHealthCareEntry => {
-  const type = parseString(entry.type);
+export const toNewEntry = (entryToCreate: any): NewEntry => {
+  const type = parseString(entryToCreate.type);
   switch (type) {
   case 'Hospital': 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return toNewHospitalEntry(entry);
+    return toNewHospitalEntry(entryToCreate);
   case 'HealthCheck':
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return toNewHealthCheckEntry(entry);
+    return toNewHealthCheckEntry(entryToCreate);
   case 'OccupationalHealthcare':
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return toNewOccupationalHealthCareEntry(entry);
+    return toNewOccupationalHealthCareEntry(entryToCreate);
   
   default:
     throw new Error('Entry type incorrect: ' + type);
@@ -112,49 +101,16 @@ export const toNewPatient = ({ name, gender, occupation, ssn, dateOfBirth, entri
     gender: parseGender(gender),
     dateOfBirth: parseDate(dateOfBirth),
     entries: entries
-    ? entries.map(entry => parseEntry(entry))
+    ? entries.map(entry => { 
+      const newEntry = toNewEntry(entry);
+      const entryToReturn = {
+        ...newEntry,
+        id: uuid()
+      };
+      return entryToReturn;
+    })
     : []
   };
 
   return newPatient;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseEntry = (entryToParse: any): Entry => {
-  if (!entryToParse || !entryToParse.type || !isString(entryToParse.type)) {
-    throw new Error('Incorrect entry!');
-  }
-
-  switch (entryToParse.type) {
-  case 'HealthCheck':
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const newHealthCheckEntry: HealthCheckEntry = {
-      ...entryToParse
-    };
-    return newHealthCheckEntry;
-  
-  case 'OccupationalHealthcare':
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const newOccupationalHealthcareEntry: OccupationalHealthCareEntry = {
-      ...entryToParse
-    };
-    return newOccupationalHealthcareEntry;
-
-  case 'Hospital':
-     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const newHospitalEntry: HospitalEntry = {
-      ...entryToParse
-    };
-    return newHospitalEntry;
-
-  default:
-    return assertNever(entryToParse as never);
-
-  }
-};
-
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  );
 };
